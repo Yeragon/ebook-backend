@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.wishlist.WishlistMapper">
+
+    <insert id="insert" parameterType="org.example.wishlist.WishlistItem">
+        INSERT INTO wishlist (id, user_id, ebook_id, favorite, created_at)
+        VALUES (#{id}, #{userId}, #{ebookId}, #{favorite}, #{createdAt})
+    </insert>
+
+    <delete id="deleteByUserIdAndEbookId">
+        DELETE FROM wishlist WHERE user_id = #{userId} AND ebook_id = #{ebookId}
+    </delete>
+
+    <select id="findByUserIdAndEbookId" resultType="org.example.wishlist.WishlistItem">
+        SELECT * FROM wishlist WHERE user_id = #{userId} AND ebook_id = #{ebookId}
+    </select>
+
+    <select id="getWishlistByUser" parameterType="java.util.UUID" resultType="org.example.wishlist.WishlistBook">
+        SELECT w.id,
+               w.ebook_id,
+               w.user_id,
+               w.favorite,
+               e.title,
+               e.author,
+               CASE WHEN e.stock > 0 THEN TRUE ELSE FALSE END AS available
+        FROM wishlist w
+                 JOIN ebooks e ON w.ebook_id = e.id
+        WHERE w.user_id = #{userId}
+    </select>
+
+
+</mapper>

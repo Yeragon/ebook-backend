@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.ebook.EbookMapper">
+
+    <select id="findById" parameterType="java.util.UUID" resultType="org.example.ebook.Ebook">
+        SELECT * FROM ebooks WHERE id = #{id}
+    </select>
+
+    <select id="findRandomFour" resultType="org.example.ebook.Ebook">
+        SELECT * FROM ebooks ORDER BY RAND() LIMIT 4
+    </select>
+
+    <insert id="insertEbook" parameterType="org.example.ebook.Ebook">
+        INSERT INTO ebooks (id, title, author, category, description, cover_url)
+        VALUES (#{id}, #{title}, #{author}, #{category}, #{description}, #{coverURL})
+    </insert>
+
+    <select id="searchByKeyword" parameterType="string" resultType="org.example.ebook.Ebook">
+        SELECT * FROM ebooks
+        WHERE title LIKE CONCAT('%', #{keyword}, '%')
+           OR author LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <select id="getStockByEbookId" parameterType="java.util.UUID" resultType="java.lang.Integer">
+        SELECT stock FROM ebooks WHERE id = #{ebookId}
+    </select>
+
+    <update id="decreaseStockById">
+        UPDATE ebooks
+        SET stock = stock - 1
+        WHERE id = #{id} AND stock > 0
+    </update>
+
+</mapper>

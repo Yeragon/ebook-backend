@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.review.ReviewMapper">
+
+    <insert id="insertReview" parameterType="org.example.review.Review">
+        INSERT INTO review (id, ebook_id, user_id, username, rating, content, created_at)
+        VALUES (#{id}, #{ebookId}, #{userId}, #{username}, #{rating}, #{content}, #{createdAt})
+    </insert>
+
+    <select id="findByEbookId" parameterType="java.util.UUID" resultType="org.example.review.Review">
+        SELECT * FROM review
+        WHERE ebook_id = #{ebookId}
+        ORDER BY created_at DESC
+    </select>
+
+</mapper>
